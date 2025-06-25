@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/shubGupta10/shared-space-server/internals/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -21,6 +22,7 @@ func ConnectToDatabase() {
 	for i := 0; i < 10; i++ {
 		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		//write migrations here
+		db.AutoMigrate(&models.User{}, &models.Space{})
 
 		if err == nil {
 			break

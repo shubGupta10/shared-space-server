@@ -7,9 +7,9 @@ import (
 )
 
 type Space struct {
-	ID         uuid.UUID `json:"id"`
-	Token      string    `json:"token" unique:"true"`
-	CreatorOne uuid.UUID `json:"creator_one"`
-	CreatorTwo uuid.UUID `json:"creator_two"`
-	CreatedAt  time.Time `json:"created_at"`
+	ID        uuid.UUID `json:"id"`
+	Token     string    `json:"token" unique:"true"`
+	Creator   uuid.UUID `json:"creator"`
+	Partner   uuid.UUID `json:"partner"`
+	CreatedAt time.Time `json:"created_at"`
 }

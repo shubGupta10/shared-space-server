@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/shubGupta10/shared-space-server/internals/config"
+	"github.com/shubGupta10/shared-space-server/internals/routes"
 )
 
 func main() {
@@ -16,6 +17,10 @@ func main() {
 
 	//connect to redis
 	config.ConnectToRedis()
+
+	// routes
+	routes.AuthRoutes(app)
+	routes.SpaceRoutes(app)
 
 	//basic health route
 	app.Get("/", func(c *fiber.Ctx) error {
