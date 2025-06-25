@@ -14,6 +14,9 @@ func main() {
 	//connect to the database
 	config.ConnectToDatabase()
 
+	//connect to redis
+	config.ConnectToRedis()
+
 	//basic health route
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
