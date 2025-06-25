@@ -21,6 +21,7 @@ func main() {
 	// routes
 	routes.AuthRoutes(app)
 	routes.SpaceRoutes(app)
+	routes.NoteRoutes(app)
 
 	//basic health route
 	app.Get("/", func(c *fiber.Ctx) error {

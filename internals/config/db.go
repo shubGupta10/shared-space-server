@@ -22,7 +22,7 @@ func ConnectToDatabase() {
 	for i := 0; i < 10; i++ {
 		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		//write migrations here
-		db.AutoMigrate(&models.User{}, &models.Space{})
+		db.AutoMigrate(&models.User{}, &models.Space{}, &models.Notes{})
 
 		if err == nil {
 			break
