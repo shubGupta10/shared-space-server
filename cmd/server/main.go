@@ -5,12 +5,28 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/shubGupta10/shared-space-server/internals/config"
 	"github.com/shubGupta10/shared-space-server/internals/routes"
 )
 
 func main() {
 	app := fiber.New()
+
+	//validate frontend url
+	frontendURL := os.Getenv("FRONTEND_URL")
+	if frontendURL == "" {
+		log.Fatal("FRONTEND_URL not set in env")
+	}
+
+	//we can do this AllowOrigins: "*" if not working for native apps
+
+	//cors configuration
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: frontendURL,
+		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH",
+		AllowHeaders: "Origin,Content-Type,Accept, Authorization",
+	}))
 
 	//connect to the database
 	config.ConnectToDatabase()
