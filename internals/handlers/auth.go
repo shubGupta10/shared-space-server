@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"github.com/shubGupta10/shared-space-server/internals/config"
 	"github.com/shubGupta10/shared-space-server/internals/models"
 	"golang.org/x/crypto/bcrypt"
@@ -37,6 +38,7 @@ func Register(c *fiber.Ctx) error {
 
 	//create a new user
 	user := models.User{
+		ID:        uuid.New(),
 		Name:      data["name"],
 		Email:     data["email"],
 		Password:  string(password),

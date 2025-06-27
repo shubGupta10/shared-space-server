@@ -48,8 +48,9 @@ func main() {
 	if port == "" {
 		port = "3000"
 	}
-	// Start the server on the specified port
-	if err := app.Listen(":" + port); err != nil {
+
+	log.Printf("🚀 Server running on 0.0.0.0:%s", port)
+	if err := app.Listen("0.0.0.0:" + port); err != nil {
 		log.Fatal(err)
 	}
 }

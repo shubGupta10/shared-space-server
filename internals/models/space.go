@@ -8,6 +8,7 @@ import (
 
 type Space struct {
 	ID        uuid.UUID `json:"id"`
+	Name      string    `json:"name"`
 	Token     string    `json:"token" unique:"true"`
 	Creator   uuid.UUID `json:"creator"`
 	Partner   uuid.UUID `json:"partner"`

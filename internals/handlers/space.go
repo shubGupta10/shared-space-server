@@ -1,7 +1,10 @@
 package handlers
 
 import (
+	"time"
+
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/shubGupta10/shared-space-server/internals/config"
 	"github.com/shubGupta10/shared-space-server/internals/models"
 	"github.com/shubGupta10/shared-space-server/internals/utils"
@@ -19,17 +22,21 @@ func CreateSpace(c *fiber.Ctx) error {
 	Token := data["token"]
 	Creator := data["creator"]
 	Partner := data["partner"]
+	Name := data["name"]
 
-	if Token == "" || Creator == "" || Partner == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Please enter Token, Creator and Partner"})
+	if Token == "" || Creator == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Please enter Token and Creator"})
 	}
 
 	//Creator and Partner should be UUIDs
 
 	spaceItem := models.Space{
-		Token:   Token,
-		Creator: utils.ConvertToUUID(Creator),
-		Partner: utils.ConvertToUUID(Partner),
+		ID:        uuid.New(),
+		Name:      Name,
+		Token:     Token,
+		Creator:   utils.ConvertToUUID(Creator),
+		Partner:   utils.ConvertToUUID(Partner),
+		CreatedAt: time.Now(),
 	}
 
 	//create the space in the database
@@ -60,4 +67,27 @@ func DeleteSpace(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{"message": "Space deleted successfully"})
+}
+
+func FetchSpace(c *fiber.Ctx) error {
+	var spaces []models.Space
+
+	//get the current userid
+	userId := c.Locals("user_id")
+	if userId == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "UserId not found"})
+	}
+
+	//convert the userId to UUID
+	newUUID, err := uuid.Parse(userId.(string))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid user ID format"})
+	}
+
+	//fetch all spaces where user is either creator and partner
+	if err := config.DB.Where("creator = ? OR partner = ?", newUUID).Find(&models.Space{}).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to fetch the space"})
+	}
+
+	return c.JSON(fiber.Map{"message": "Successfully fetched the spaces", "spaces": spaces})
 }

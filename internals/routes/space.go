@@ -10,5 +10,6 @@ func SpaceRoutes(app *fiber.App) {
 	space := app.Group("/space", middleware.ProtectedRoute)
 
 	space.Post("/create", handlers.CreateSpace)
+	space.Get("/fetch-spaces", handlers.FetchSpace)
 	space.Delete("/delete", handlers.DeleteSpace)
 }
