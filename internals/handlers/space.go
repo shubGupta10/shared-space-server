@@ -85,7 +85,7 @@ func FetchSpace(c *fiber.Ctx) error {
 	}
 
 	//fetch all spaces where user is either creator and partner
-	if err := config.DB.Where("creator = ? OR partner = ?", newUUID).Find(&models.Space{}).Error; err != nil {
+	if err := config.DB.Where("creator = ? OR partner = ?", newUUID, newUUID).Find(&spaces).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to fetch the space"})
 	}
 
